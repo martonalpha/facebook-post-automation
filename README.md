@@ -1,21 +1,24 @@
-# Facebook Name-Day Bot 🎉
+# Facebook Post Automation
 
-A small Python automation that, **once a day**, generates a Hungarian name-day
-greeting image and posts it to a Facebook Page via the Graph API.
+A small Python automation that generates a Hungarian name-day greeting image
+and posts it to a Facebook Page once a day, automatically.
 
-In Hungary every day of the year is associated with one or more first names
-("névnap" = name day), and it is a tradition to congratulate people on their
-name day. This bot turns that tradition into an automatic daily Facebook post:
-it looks up today's name, draws a nice greeting card, and publishes it.
+In Hungary every day of the year is tied to one or more first names
+("névnap" = name day), and congratulating people on their name day is a small
+tradition. The bot looks up today's name, draws a greeting card and publishes it.
 
-> **A note on reach / why I'm sharing this anyway**
->
-> I originally ran this bot to post automatically every day at a fixed time.
-> It works, but Facebook actively deprioritizes automated / bot-style posting,
-> so a page fed only by this script will get very little organic reach — Facebook
-> simply won't recommend it to many people. So this is **not** a growth hack;
-> it's a fun little learning project about image generation + the Graph API.
-> I'm publishing it in case it's useful to someone as an example. 🙂
+## Why I built it (and what I learned)
+
+This was an experiment: I wanted to see whether I could build a fully
+automated system end to end. Hungarian name days were a perfect fit — there is
+a name to celebrate every single day — so I made something that posts a fresh
+greeting at a set time each day, with no manual work.
+
+**The lesson:** Facebook doesn't like automation. Bot-style posting gets
+deprioritized, so the algorithm won't recommend the page to many people and
+organic reach stays very low. So this isn't a growth hack — it's a finished
+learning project, and I'm sharing it as a clean example of image generation
+plus the Graph API.
 
 ## How it works
 
@@ -102,7 +105,7 @@ The bot posts whatever the current date's name day is, so you just need to run
 **Linux / macOS (cron)** — post every day at 08:00:
 
 ```cron
-0 8 * * * cd /path/to/facebook-nameday-bot && /path/to/.venv/bin/python main.py >> bot.log 2>&1
+0 8 * * * cd /path/to/facebook-post-automation && /path/to/.venv/bin/python main.py >> bot.log 2>&1
 ```
 
 **Windows (Task Scheduler):** create a Basic Task that runs daily at 08:00 and
