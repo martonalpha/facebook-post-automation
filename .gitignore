@@ -1,0 +1,19 @@
+# Secrets - never commit
+.env
+
+# Generated images
+output/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# IDE / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*:Zone.Identifier
