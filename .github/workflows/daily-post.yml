@@ -1,0 +1,27 @@
+name: Daily name-day post
+
+on:
+  schedule:
+    # Runs every day at 06:00 UTC (08:00 in Hungary during summer time).
+    - cron: "0 6 * * *"
+  workflow_dispatch: {}  # allows manual runs from the Actions tab
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate and post today's greeting
+        env:
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          FB_ACCESS_TOKEN: ${{ secrets.FB_ACCESS_TOKEN }}
+        run: python main.py

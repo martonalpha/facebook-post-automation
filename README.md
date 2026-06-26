@@ -9,16 +9,33 @@ tradition. The bot looks up today's name, draws a greeting card and publishes it
 
 ## Why I built it (and what I learned)
 
-This was an experiment: I wanted to see whether I could build a fully
-automated system end to end. Hungarian name days were a perfect fit — there is
-a name to celebrate every single day — so I made something that posts a fresh
-greeting at a set time each day, with no manual work.
+This was an experiment to see whether I could build a complete, hands-off
+automation end to end. Hungarian name days were a perfect fit — there is a name
+to celebrate every single day — so it became a steady daily content source.
 
-**The lesson:** Facebook doesn't like automation. Bot-style posting gets
+How it runs:
+
+- The code is deployed to **GitHub Actions** and runs once a day, on its own.
+- Each run first **generates the image** for that day's name day (currently
+  Hungarian, but the same approach works for Slovak, Czech or any other dataset),
+  then **posts the generated image to Facebook**.
+- No server to maintain — GitHub runs it on a schedule and the secrets live in
+  repository secrets.
+
+**The main lesson:** Facebook doesn't like automation. Bot-style posting gets
 deprioritized, so the algorithm won't recommend the page to many people and
 organic reach stays very low. So this isn't a growth hack — it's a finished
-learning project, and I'm sharing it as a clean example of image generation
-plus the Graph API.
+learning project, and I'm sharing it as a clean example of scheduled automation,
+image generation and the Graph API.
+
+## Use cases
+
+- 🎉 **Name-day / birthday greetings** posted automatically to a page.
+- 🌍 **Other languages or countries** — swap `data/nevnapok.json` for a Slovak,
+  Czech or any other dataset; the pipeline stays the same.
+- 🗓️ **Any "one post per day" content** (quotes, tips, "on this day" facts) by
+  changing what the image draws and what `main.py` looks up.
+- 🧩 **A template for scheduled Graph API posting** in your own projects.
 
 ## How it works
 
@@ -97,10 +114,20 @@ Generate and post today's greeting:
 python main.py
 ```
 
-## Scheduling a daily post
+## Running it daily
 
-The bot posts whatever the current date's name day is, so you just need to run
-`main.py` once per day at your preferred time.
+### GitHub Actions (how I deployed it)
+
+The repo includes [`.github/workflows/daily-post.yml`](.github/workflows/daily-post.yml),
+which runs `main.py` once a day in the cloud — no server needed.
+
+1. In your repository go to **Settings → Secrets and variables → Actions** and
+   add `FB_PAGE_ID` and `FB_ACCESS_TOKEN` as repository secrets.
+2. Adjust the `cron` time in the workflow if you like (it is in UTC).
+
+You can also trigger a run manually from the **Actions** tab to test it.
+
+### Locally with cron / Task Scheduler
 
 **Linux / macOS (cron)** — post every day at 08:00:
 
@@ -108,9 +135,9 @@ The bot posts whatever the current date's name day is, so you just need to run
 0 8 * * * cd /path/to/facebook-post-automation && /path/to/.venv/bin/python main.py >> bot.log 2>&1
 ```
 
-**Windows (Task Scheduler):** create a Basic Task that runs daily at 08:00 and
-points to `.venv\Scripts\python.exe` with `main.py` as the argument, and set
-"Start in" to the project folder.
+**Windows (Task Scheduler):** create a Basic Task that runs daily, points to
+`.venv\Scripts\python.exe` with `main.py` as the argument, and set "Start in"
+to the project folder.
 
 ## Credits
 
